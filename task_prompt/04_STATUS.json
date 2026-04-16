@@ -2,14 +2,14 @@
   "project_name": "opening_preexperiment_embodied_3d_agent",
   "status": "IN_PROGRESS",
   "current_gate": "Gate 1",
-  "current_task": "T2",
-  "current_subtask": "T2.3",
-  "next_action": "Export a formal object memory dump to outputs/runs/object_memory_dump.json using the new object_memory module, then prepare a lightweight visualization for inspection.",
+  "current_task": "T3",
+  "current_subtask": "T3.1",
+  "next_action": "Implement a first runnable random exploration policy with a unified policy interface so the project can move toward a full task-to-answer loop.",
   "preferred_plan": "Plan A",
   "blocked": false,
   "block_reason": "",
   "last_completed_task": "T2",
-  "last_completed_subtask": "T2.2",
+  "last_completed_subtask": "T2.4",
   "latest_outputs": [
     ".gitignore",
     "requirements.txt",
@@ -21,10 +21,12 @@
     "outputs/logs/env_report.md",
     "outputs/logs/task_validation.md",
     "outputs/runs/occupancy_map_summary.json",
+    "outputs/runs/object_memory_dump.json",
     "outputs/runs/object_memory_preview.json",
     "outputs/runs/minimal_demo_trajectory.json",
     "outputs/runs/task_preview.json",
     "outputs/tasks/tasks.json",
+    "outputs/figures/object_memory_overview.png",
     "outputs/figures/minimal_demo_rgb.png",
     "outputs/figures/minimal_demo_depth.png",
     "outputs/figures/minimal_demo_semantic.png",
@@ -38,6 +40,7 @@
     "scripts/run_minimal_trajectory.py",
     "scripts/export_minimal_observations.py",
     "scripts/export_minimal_topdown_map.py",
+    "scripts/export_object_memory_figure.py",
     "scripts/generate_tasks.py",
     "scripts/validate_tasks.py",
     "src/memory/occupancy_map.py",
@@ -52,5 +55,5 @@
     "outputs/runs/",
     "outputs/tasks/"
   ],
-  "notes": "Always read control files before work. Default simulator: Habitat-Lab/Habitat-Sim. Prefer HM3D small split or Habitat demo scene. Do not switch simulator silently. Gate 0 remains available through the opening_preexp conda environment and reusable activation scripts at scripts/bootstrap_env.sh and scripts/activate_env.sh. To match the official Habitat conda packages, the runtime inside opening_preexp has been retargeted to Python 3.9.19; Habitat-Sim 0.3.3 and Habitat-Lab 0.3.3 are installed, HM3D example_full has been downloaded under data/, and scripts/check_env.py now reports PLAN_A_READY. T0 is complete: scripts/run_minimal_trajectory.py records a reproducible 24-step random trajectory in the HM3D example scene, scripts/export_minimal_observations.py exports RGB/depth/semantic example images, and scripts/export_minimal_topdown_map.py renders the top-down path figure at outputs/figures/minimal_demo.png. T1 is complete: scripts/generate_tasks.py now writes a balanced formal task set to outputs/tasks/tasks.json with 24 tasks, task-type coverage room_exist=8 and near_exist=16, label distribution yes/no = 12/12, explicit gt_source metadata, unified task_spec fields, and gt_answer_bool for downstream consumers. scripts/validate_tasks.py generates outputs/logs/task_validation.md and currently reports PASS with zero validation failures. For manual answer checking, scripts/browse_scene.py now provides an interactive browser for the current HM3D scene with RGB/depth/semantic switching, task cycling, HUD toggle, and screenshot capture. The browser was further refined to use a compact left-top HUD, a thinner help strip, and a higher default render resolution of 960x720 so the scene is less blurry and the overlay blocks less of the view; outputs/figures/scene_browser_preview.png verifies the updated browser can render the scene with task HUD overlay. T2.1 is complete: src/memory/occupancy_map.py now builds a minimal trajectory-driven spatial memory with explored/free/occupied/frontier cells plus visit counts, and can export outputs/runs/occupancy_map_summary.json from the existing HM3D minimal trajectory. T2.2 is complete: src/memory/object_memory.py now loads HM3D GT semantic objects, filters structural categories, and accumulates object memory entries across trajectory poses with category, region_id, bbox geometry, first/last seen step, observation counts, observed step ids, and min distance. The current preview at outputs/runs/object_memory_preview.json contains 37 observed objects across 21 categories. Both memory modules remain minimal: occupancy uses x-z grid discretization and path tracing around agent poses without depth-derived obstacles, while object memory uses object-center plus FOV/radius geometry as a visibility heuristic instead of pixel-level semantic fusion. Repository hygiene support is also in place: the root .gitignore now ignores local environments, downloaded datasets, external clones, generated outputs, caches, and local scratch notes while keeping source and control files trackable, and scripts/push_repo.sh now provides a reusable push helper that can configure origin once and then run add+commit+push in one command. Because the current HM3D example scene does not expose reliable native room labels, room_exist currently uses region-object keyword heuristics and near_exist uses same-region cooccurrence heuristics. habitat_baselines is still absent and some early non-T0 packages such as pandas/open3d need to be backfilled later if required."
+  "notes": "Always read control files before work. Default simulator: Habitat-Lab/Habitat-Sim. Prefer HM3D small split or Habitat demo scene. Do not switch simulator silently. Gate 0 remains available through the opening_preexp conda environment and reusable activation scripts at scripts/bootstrap_env.sh and scripts/activate_env.sh. To match the official Habitat conda packages, the runtime inside opening_preexp has been retargeted to Python 3.9.19; Habitat-Sim 0.3.3 and Habitat-Lab 0.3.3 are installed, HM3D example_full has been downloaded under data/, and scripts/check_env.py now reports PLAN_A_READY. T0 is complete: scripts/run_minimal_trajectory.py records a reproducible 24-step random trajectory in the HM3D example scene, scripts/export_minimal_observations.py exports RGB/depth/semantic example images, and scripts/export_minimal_topdown_map.py renders the top-down path figure at outputs/figures/minimal_demo.png. T1 is complete: scripts/generate_tasks.py now writes a balanced formal task set to outputs/tasks/tasks.json with 24 tasks, task-type coverage room_exist=8 and near_exist=16, label distribution yes/no = 12/12, explicit gt_source metadata, unified task_spec fields, and gt_answer_bool for downstream consumers. scripts/validate_tasks.py generates outputs/logs/task_validation.md and currently reports PASS with zero validation failures. For manual answer checking, scripts/browse_scene.py now provides an interactive browser for the current HM3D scene with RGB/depth/semantic switching, task cycling, HUD toggle, and screenshot capture. The browser was further refined to use a compact left-top HUD, a thinner help strip, and a higher default render resolution of 960x720 so the scene is less blurry and the overlay blocks less of the view; outputs/figures/scene_browser_preview.png verifies the updated browser can render the scene with task HUD overlay. T2 is now complete: src/memory/occupancy_map.py builds a minimal trajectory-driven spatial memory with explored/free/occupied/frontier cells plus visit counts, src/memory/object_memory.py accumulates HM3D GT semantic objects across trajectory poses with category, region_id, bbox geometry, first/last seen step, observation counts, observed step ids, and min distance, outputs/runs/object_memory_dump.json provides the formal accumulated memory artifact with 37 entries across 21 categories and 25 pose updates, and scripts/export_object_memory_figure.py renders outputs/figures/object_memory_overview.png so object distribution, category counts, and first/last seen ranges can be inspected visually. Both memory modules remain minimal: occupancy uses x-z grid discretization and path tracing around agent poses without depth-derived obstacles, while object memory uses object-center plus FOV/radius geometry as a visibility heuristic instead of pixel-level semantic fusion. Repository hygiene support is also in place: the root .gitignore now ignores local environments, downloaded datasets, external clones, generated outputs, caches, and local scratch notes while keeping source and control files trackable, and scripts/push_repo.sh now provides a reusable push helper that can configure origin once and then run add+commit+push in one command. Because the current HM3D example scene does not expose reliable native room labels, room_exist currently uses region-object keyword heuristics and near_exist uses same-region cooccurrence heuristics. habitat_baselines is still absent and some early non-T0 packages such as pandas/open3d need to be backfilled later if required."
 }

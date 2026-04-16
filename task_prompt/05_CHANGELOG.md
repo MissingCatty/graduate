@@ -154,3 +154,15 @@
 - 内容：新增仓库推送脚本 `scripts/push_repo.sh`。该脚本支持首次通过 `--remote-url` 配置 `origin`，后续默认执行一键 `git add -A`、按给定或自动生成的 message 提交，并推送当前分支；同时提供 `--skip-commit` 和 `--dry-run` 以便更安全地使用。已通过 `--help` 和 `--dry-run` 做无副作用验证。
 - 新增文件：scripts/push_repo.sh
 - 下一步：恢复主线，继续执行 T2.3，导出正式 `outputs/runs/object_memory_dump.json`
+
+- 时间：2026-04-16T21:54:10+08:00
+- 任务：T2.3
+- 内容：使用现有 `src/memory/object_memory.py` 导出正式对象记忆文件 `outputs/runs/object_memory_dump.json`，并完成结构核对。当前正式 dump 包含 `37` 条对象记忆条目、`21` 个观察到的对象类别，以及 `25` 个 pose 更新；条目字段覆盖 `category / region_id / bbox / first_seen_step / last_seen_step / observation_count / observed_step_ids / min_distance_m`。
+- 新增文件：outputs/runs/object_memory_dump.json
+- 下一步：执行 T2.4，生成对象记忆可视化图
+
+- 时间：2026-04-16T21:58:34+08:00
+- 任务：T2.4
+- 内容：新增 `scripts/export_object_memory_figure.py`，基于正式对象记忆 dump 和现有最小轨迹生成 `outputs/figures/object_memory_overview.png`。当前可视化图在单张画布中汇总了对象 top-down 分布、类别计数、以及对象的 first/last seen 时间线，便于人工复查对象记忆是否跨时间正确累积。至此 T2 完成。
+- 新增文件：scripts/export_object_memory_figure.py, outputs/figures/object_memory_overview.png
+- 下一步：执行 T3.1，实现 `random_policy.py`

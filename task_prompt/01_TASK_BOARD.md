@@ -6,7 +6,7 @@
 
 ## 总体状态
 - 项目状态：`IN_PROGRESS`
-- 当前推荐执行任务：`T2`
+- 当前推荐执行任务：`T3`
 - 当前所处 Gate：`Gate 1`
 - 仓库辅助：根目录 `.gitignore` 已生成，当前会忽略本地环境、下载数据、外部依赖克隆、生成输出、缓存和本地记录文档
 - 推送辅助：`scripts/push_repo.sh` 已生成；首次可用 `--remote-url` 配置 `origin`，之后默认可一键 `add + commit + push`
@@ -98,17 +98,17 @@
 ### 子任务
 - [x] T2.1 实现 `src/memory/occupancy_map.py`
 - [x] T2.2 实现 `src/memory/object_memory.py`
-- [ ] T2.3 导出 `outputs/runs/object_memory_dump.json`
-- [ ] T2.4 生成对象记忆可视化图
+- [x] T2.3 导出 `outputs/runs/object_memory_dump.json`
+- [x] T2.4 生成对象记忆可视化图
 
 ### 完成判定
-- [ ] 记忆可跨时间累积
-- [ ] occupancy map 可供 frontier 策略使用
-- [ ] object memory 可导出与复查
+- [x] 记忆可跨时间累积
+- [x] occupancy map 可供 frontier 策略使用
+- [x] object memory 可导出与复查
 
 ### 备注
-- 输出路径：`src/memory/occupancy_map.py`, `src/memory/object_memory.py`, `outputs/runs/occupancy_map_summary.json`, `outputs/runs/object_memory_preview.json`
-- 记忆字段：当前 `occupancy_map` 使用轨迹位置的 `x/z` 离散网格化，维护 `explored_cells / free_cells / occupied_cells / frontier_cells / visit_counts`；当前 `object_memory` 使用 HM3D GT semantic objects 的 `category / region_id / bbox center / bbox size`，并沿轨迹累计 `first_seen_step / last_seen_step / observation_count / observed_step_ids / min_distance_m`。当前 smoke 结果为 `25` 个 pose、`43` 个 free cells、`20` 个 frontier cells，以及 `37` 个累计观察到的对象、`21` 个对象类别。当前对象记忆仍是基于对象中心与 FOV/radius 的几何可见性近似，不是逐像素语义融合
+- 输出路径：`src/memory/occupancy_map.py`, `src/memory/object_memory.py`, `scripts/export_object_memory_figure.py`, `outputs/runs/occupancy_map_summary.json`, `outputs/runs/object_memory_preview.json`, `outputs/runs/object_memory_dump.json`, `outputs/figures/object_memory_overview.png`
+- 记忆字段：当前 `occupancy_map` 使用轨迹位置的 `x/z` 离散网格化，维护 `explored_cells / free_cells / occupied_cells / frontier_cells / visit_counts`；当前 `object_memory` 使用 HM3D GT semantic objects 的 `category / region_id / bbox center / bbox size`，并沿轨迹累计 `first_seen_step / last_seen_step / observation_count / observed_step_ids / min_distance_m`。当前正式 dump 已导出，包含 `25` 个 pose 更新、`37` 个累计观察到的对象、`21` 个对象类别；并已进一步生成 `outputs/figures/object_memory_overview.png`，在一张图里汇总 top-down 对象分布、类别计数和 first/last seen 时间线。当前对象记忆仍是基于对象中心与 FOV/radius 的几何可见性近似，不是逐像素语义融合
 
 ---
 
