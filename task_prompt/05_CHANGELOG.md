@@ -166,3 +166,9 @@
 - 内容：新增 `scripts/export_object_memory_figure.py`，基于正式对象记忆 dump 和现有最小轨迹生成 `outputs/figures/object_memory_overview.png`。当前可视化图在单张画布中汇总了对象 top-down 分布、类别计数、以及对象的 first/last seen 时间线，便于人工复查对象记忆是否跨时间正确累积。至此 T2 完成。
 - 新增文件：scripts/export_object_memory_figure.py, outputs/figures/object_memory_overview.png
 - 下一步：执行 T3.1，实现 `random_policy.py`
+
+- 时间：2026-04-16T22:08:53+08:00
+- 任务：T3.1
+- 内容：新增 `src/policies/base_policy.py` 和 `src/policies/random_policy.py`，先建立统一策略接口 `PolicyInput / PolicyDecision / BaseExplorationPolicy`，再实现可直接运行的 `RandomPolicy`。随后在当前 HM3D example scene 上完成 24-step smoke rollout，并生成 `outputs/runs/random_policy_preview.json`；当前动作分布为 `move_forward=11 / turn_left=9 / turn_right=4`，碰撞次数为 `11`，同时附带 rollout 结束时的 occupancy 摘要，便于后续 `frontier_policy` 直接复用。
+- 新增文件：src/policies/__init__.py, src/policies/base_policy.py, src/policies/random_policy.py, outputs/runs/random_policy_preview.json
+- 下一步：执行 T3.2，实现 `frontier_policy.py`

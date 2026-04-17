@@ -116,7 +116,7 @@
 目标：实现并跑通 random / frontier / task-aware。
 
 ### 子任务
-- [ ] T3.1 实现 `random_policy.py`
+- [x] T3.1 实现 `random_policy.py`
 - [ ] T3.2 实现 `frontier_policy.py`
 - [ ] T3.3 实现 `task_aware_policy.py`
 - [ ] T3.4 实现 `task_parser.py`
@@ -128,7 +128,8 @@
 - [ ] 日志可供评估脚本直接读取
 
 ### 备注
-- 输出路径：
+- 输出路径：`src/policies/__init__.py`, `src/policies/base_policy.py`, `src/policies/random_policy.py`, `outputs/runs/random_policy_preview.json`
+- 当前进展：已建立统一策略接口 `PolicyInput / PolicyDecision / BaseExplorationPolicy`，并实现可直接运行的 `RandomPolicy`。当前 smoke rollout 复用 `outputs/tasks/tasks.json` 中首条任务与现有 HM3D scene，成功跑完 `24` step，输出动作分布 `move_forward=11 / turn_left=9 / turn_right=4`，碰撞次数 `11`，并同步导出 rollout 末态对应的 occupancy 摘要，便于后续 `frontier_policy` 直接接入
 - task-aware 打分形式：
 
 ---
