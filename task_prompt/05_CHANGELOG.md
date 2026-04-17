@@ -172,3 +172,21 @@
 - 内容：新增 `src/policies/base_policy.py` 和 `src/policies/random_policy.py`，先建立统一策略接口 `PolicyInput / PolicyDecision / BaseExplorationPolicy`，再实现可直接运行的 `RandomPolicy`。随后在当前 HM3D example scene 上完成 24-step smoke rollout，并生成 `outputs/runs/random_policy_preview.json`；当前动作分布为 `move_forward=11 / turn_left=9 / turn_right=4`，碰撞次数为 `11`，同时附带 rollout 结束时的 occupancy 摘要，便于后续 `frontier_policy` 直接复用。
 - 新增文件：src/policies/__init__.py, src/policies/base_policy.py, src/policies/random_policy.py, outputs/runs/random_policy_preview.json
 - 下一步：执行 T3.2，实现 `frontier_policy.py`
+
+- 时间：2026-04-17T10:33:26+08:00
+- 任务：T3.2
+- 内容：新增 `src/policies/rollout_utils.py` 和 `src/policies/frontier_policy.py`，在共享策略接口上实现最小 `FrontierPolicy`。该策略当前会从 occupancy map 中读取 frontier cells，选择最近 frontier 作为局部目标，并根据朝向偏差执行 `turn_left / turn_right / move_forward`，同时在前进碰撞后启用短暂 collision-recovery cooldown。已在当前 HM3D example scene 上完成 24-step smoke rollout，并生成 `outputs/runs/frontier_policy_preview.json`；当前动作分布为 `move_forward=6 / turn_left=10 / turn_right=8`，碰撞次数为 `6`，低于同任务 smoke 下 `random` 的 `11`。
+- 新增文件：src/policies/rollout_utils.py, src/policies/frontier_policy.py, outputs/runs/frontier_policy_preview.json
+- 下一步：执行 T3.3，实现 `task_aware_policy.py`
+
+- 时间：2026-04-17T10:41:11+08:00
+- 任务：T3.3
+- 内容：新增 `src/policies/task_aware_policy.py`，在 `FrontierPolicy` 的执行框架上实现最小 `TaskAwarePolicy`。该策略当前会从 `task_spec` 提取 hint categories，用 GT semantic objects 构建 scene prior，并在 rollout 中实时更新最小 `object_memory`，把已观察到的相关对象作为更强的 frontier relevance 信号。已在当前 HM3D example scene 上完成 24-step smoke rollout，并生成 `outputs/runs/task_aware_policy_preview.json`；当前动作分布为 `move_forward=7 / turn_left=8 / turn_right=9`，碰撞次数降为 `1`，低于同任务 smoke 下 `frontier` 的 `6` 和 `random` 的 `11`。
+- 新增文件：src/policies/task_aware_policy.py, outputs/runs/task_aware_policy_preview.json
+- 下一步：执行 T3.4，实现 `task_parser.py`
+
+- 时间：2026-04-17T10:51:32+08:00
+- 任务：T3.4
+- 内容：新增 `src/policies/task_parser.py`，把原始任务统一标准化为 `ParsedTask` 表示，并提供独立 preview 导出 `outputs/runs/task_parser_preview.json`。随后更新 `src/policies/task_aware_policy.py`，改为直接消费解析后的标准任务表示，而不再内联读取 `task_spec`。已复跑 `outputs/runs/task_aware_policy_preview.json` 验证无回归，当前同任务 smoke rollout 的碰撞次数仍为 `1`。
+- 新增文件：src/policies/task_parser.py, outputs/runs/task_parser_preview.json；更新 outputs/runs/task_aware_policy_preview.json
+- 下一步：执行 T3.5，保存若干 episode rollout 与轨迹图

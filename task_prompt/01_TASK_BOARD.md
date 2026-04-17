@@ -117,9 +117,9 @@
 
 ### 子任务
 - [x] T3.1 实现 `random_policy.py`
-- [ ] T3.2 实现 `frontier_policy.py`
-- [ ] T3.3 实现 `task_aware_policy.py`
-- [ ] T3.4 实现 `task_parser.py`
+- [x] T3.2 实现 `frontier_policy.py`
+- [x] T3.3 实现 `task_aware_policy.py`
+- [x] T3.4 实现 `task_parser.py`
 - [ ] T3.5 保存若干 episode rollout 与轨迹图
 
 ### 完成判定
@@ -128,9 +128,9 @@
 - [ ] 日志可供评估脚本直接读取
 
 ### 备注
-- 输出路径：`src/policies/__init__.py`, `src/policies/base_policy.py`, `src/policies/random_policy.py`, `outputs/runs/random_policy_preview.json`
-- 当前进展：已建立统一策略接口 `PolicyInput / PolicyDecision / BaseExplorationPolicy`，并实现可直接运行的 `RandomPolicy`。当前 smoke rollout 复用 `outputs/tasks/tasks.json` 中首条任务与现有 HM3D scene，成功跑完 `24` step，输出动作分布 `move_forward=11 / turn_left=9 / turn_right=4`，碰撞次数 `11`，并同步导出 rollout 末态对应的 occupancy 摘要，便于后续 `frontier_policy` 直接接入
-- task-aware 打分形式：
+- 输出路径：`src/policies/__init__.py`, `src/policies/base_policy.py`, `src/policies/rollout_utils.py`, `src/policies/random_policy.py`, `src/policies/frontier_policy.py`, `src/policies/task_aware_policy.py`, `src/policies/task_parser.py`, `outputs/runs/random_policy_preview.json`, `outputs/runs/frontier_policy_preview.json`, `outputs/runs/task_aware_policy_preview.json`, `outputs/runs/task_parser_preview.json`
+- 当前进展：已建立统一策略接口 `PolicyInput / PolicyDecision / BaseExplorationPolicy` 与 rollout 公共函数，并实现可直接运行的 `RandomPolicy`、`FrontierPolicy` 和 `TaskAwarePolicy`。同时已新增 `task_parser.py`，把原始任务标准化为统一的 `ParsedTask` 表示，显式输出 `relation / room_label / target_category / anchor_category / semantic_hints / room_keywords / hint_categories`；`task_aware_policy` 已改为消费该解析结果，而不是直接内联解析 `task_spec`。当前三条 smoke rollout 均复用首条正式任务与同一 HM3D scene：`random` 动作分布 `move_forward=11 / turn_left=9 / turn_right=4`、碰撞次数 `11`；`frontier` 动作分布 `move_forward=6 / turn_left=10 / turn_right=8`、碰撞次数 `6`；`task_aware` 动作分布 `move_forward=7 / turn_left=8 / turn_right=9`、碰撞次数进一步降为 `1`
+- task-aware 打分形式：当前使用 `combined_score = observed_relevance_score + scene_prior_score - frontier_distance_penalty * frontier_distance`。其中 `observed_relevance_score` 来自已观察到的相关对象记忆，`scene_prior_score` 来自与 `task_spec` 关键词匹配的 GT semantic object 先验，最终仍沿用 `frontier` 的“对齐朝向 -> 前进 / 碰撞恢复”执行框架
 
 ---
 
